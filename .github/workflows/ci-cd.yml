@@ -165,16 +165,11 @@ jobs:
     if: always()
 
     steps:
-      - name: Notificación por Slack
-        if: always()
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,took
-          text: |
-            ${{ needs.deploy.result == 'success' && 'Deploy exitoso' || 'Pipeline fallido' }} en `${{ github.repository }}`
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Resultado del pipeline
+        run: |
+          echo "Tests: ${{ needs.test.result }}"
+          echo "Build: ${{ needs.build.result }}"
+          echo "Deploy: ${{ needs.deploy.result }}"
 
       # Alternativa: notificación por email via GitHub nativo
       # GitHub ya envía emails automáticos cuando un workflow falla.
